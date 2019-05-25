@@ -13,7 +13,7 @@ It will check the authorization token.
 If it matches `SUPERSECUREAUTTHTOKEN`, then returns `{ok: true}`;
 otherwise, return `{ok: false}`.
 
-**gatewa_svc**
+**gateway_svc**
 
 It has two endpoints `api/v1/hey` and `/api/v1/book/:id`.
 `api/v1/hey` will simply response "Hello World".
@@ -22,7 +22,7 @@ If it is authenticated, it will then make a request to **books-svc** asking for 
 
 ## Running Service
 
-Running `books_svc` as an example.
+We are using `books_svc` as an example here. But the principle is the same for `auth_svc` and `gateway_svc`
 
 ### Running service locally
 
@@ -79,6 +79,23 @@ $ curl http://localhost:3000/api/v1/book/1 | jq
 }
 ```
 
-### Running service inside minikube
+### Running service inside minikube cluster
 
-A bit more complicated. Please refer to the blog for details.
+Build docker image (for the docker daemon inside minikube).
+
+```
+eval $(minikube docker-env)
+docker build ./books_svc -t books
+```
+
+Create deployment:
+
+```
+kubectl apply -f books_svc/books-deployment.yaml
+```
+
+Create service.
+
+```
+kubectl apply -f books_svc/books-service.yaml
+```
